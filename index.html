@@ -10,11 +10,11 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700&display=swap');
-    
+
     body {
       font-family: 'Inter', sans-serif;
       background-color: #090414;
-      background-image: 
+      background-image:
         radial-gradient(circle at 12% 18%, rgba(168, 85, 247, 0.22), transparent 38%),
         radial-gradient(circle at 88% 15%, rgba(249, 115, 22, 0.18), transparent 36%),
         radial-gradient(circle at 50% 85%, rgba(16, 185, 129, 0.18), transparent 42%);
@@ -38,6 +38,7 @@
       background: linear-gradient(90deg, #c084fc, #fb923c, #34d399, #f472b6, #c084fc);
       background-size: 250% auto;
       -webkit-background-clip: text;
+      background-clip: text;
       -webkit-text-fill-color: transparent;
       animation: rainbowShift 5s linear infinite;
     }
@@ -56,41 +57,51 @@
       border: 1px solid rgba(16, 185, 129, 0.45);
       box-shadow: 0 0 25px rgba(16, 185, 129, 0.18), inset 0 0 12px rgba(16, 185, 129, 0.08);
     }
-    .rainbow-btn {
-      background: linear-gradient(90deg, #9333ea, #ea580c, #059669, #9333ea);
-      background-size: 250% 100%;
-      animation: rainbowShift 5s ease infinite;
-      box-shadow: 0 0 24px rgba(249, 115, 22, 0.4);
-    }
-    .rainbow-btn:hover {
-      box-shadow: 0 0 32px rgba(16, 185, 129, 0.65);
-      transform: translateY(-1px);
-    }
 
-    /* Fix Leaflet Map Rendering & Dark Cyberpunk Filter for Keyless Tiles */
+    /* FIX: this rule was previously left unclosed, which swallowed every rule below it (including #map) */
+    .rainbow-btn {
+      background: linear-gradient(90deg, #9333ea, #ea580c, #10b981, #9333ea);
+      background-size: 300% 300%;
+      animation: rainbowShift 6s ease infinite;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 0 18px rgba(168, 85, 247, 0.35);
+      cursor: pointer;
+    }
+    .rainbow-btn:hover { filter: brightness(1.15); }
+    .rainbow-btn:active { transform: scale(0.99); }
+
+    /* Leaflet Map */
     #map {
-      height: 430px;
-      min-height: 430px;
+      height: 450px;
+      min-height: 450px;
       width: 100%;
       border-radius: 0.75rem;
       z-index: 10;
-      border: 1px solid rgba(168, 85, 247, 0.45);
+      border: 1px solid rgba(168, 85, 247, 0.55);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     }
     .leaflet-container {
-      background: #0d071b !important;
+      background: #e5e3df !important;
       font-family: 'Inter', sans-serif;
     }
-    /* Invert keyless Esri/OSM street tiles into a glowing dark-mode map without needing any API key */
-    .dark-map-tiles {
-      filter: invert(100%) hue-rotate(190deg) brightness(92%) contrast(95%);
+    .gmaps-road-enhancer {
+      filter: contrast(105%) saturate(112%);
     }
     .leaflet-popup-content-wrapper {
-      background: #170d2e !important;
+      background: rgba(18, 10, 36, 0.96) !important;
       color: #f8fafc !important;
       border: 1px solid #a855f7;
-      border-radius: 8px;
+      border-radius: 10px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
     }
-    .leaflet-popup-tip { background: #170d2e !important; }
+    .leaflet-popup-tip { background: rgba(18, 10, 36, 0.96) !important; }
+    .map-pill-btn { transition: all 0.2s ease; }
+    .map-pill-btn.active {
+      background: linear-gradient(90deg, #9333ea, #ea580c);
+      color: #ffffff;
+      border-color: #fb923c;
+      box-shadow: 0 0 12px rgba(249, 115, 22, 0.45);
+    }
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: #090414; }
     ::-webkit-scrollbar-thumb { background: #7e22ce; border-radius: 3px; }
@@ -139,7 +150,7 @@
   <!-- Main Content Grid -->
   <main class="flex-1 p-5 md:p-6 max-w-[1600px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-    <!-- Left Column: Controls, Math Formula Box & Agent Swarm Logs (4 cols) -->
+    <!-- Left Column -->
     <section class="lg:col-span-4 flex flex-col gap-5">
       <!-- Dispatch Control Panel -->
       <div class="glow-purple rounded-2xl p-5">
@@ -202,7 +213,7 @@
         </div>
       </div>
 
-      <!-- Properly Rendered HTML/MathML Quantitative Formulation Card -->
+      <!-- Quantitative Formulation Card -->
       <div class="glow-green rounded-2xl p-4 space-y-2">
         <div class="flex items-center justify-between">
           <h2 class="text-xs font-bold uppercase tracking-wider text-emerald-300 mono">2. C++17 Quantitative Model</h2>
@@ -216,11 +227,11 @@
         </div>
       </div>
 
-      <!-- Autonomous Agent State Graph Console -->
+      <!-- Agent State Graph Console -->
       <div class="glow-purple rounded-2xl p-5 flex-1 flex flex-col">
         <div class="flex items-center justify-between mb-3">
           <h2 class="text-sm font-bold uppercase tracking-wider text-purple-300 mono">3. LangGraph Execution Trace</h2>
-          <span id="solverLatency" class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 mono">C++ Kernel: 4.2 ms</span>
+          <span id="solverLatency" class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 mono">C++ Kernel: -- ms</span>
         </div>
         <div id="agentLog" class="flex-1 bg-[#090414] border border-purple-500/30 rounded-xl p-3 mono text-xs space-y-2 overflow-y-auto max-h-[250px]">
           <div class="text-purple-400">[SYSTEM] Initializing ArbRoute-Swarm StateGraph...</div>
@@ -228,7 +239,7 @@
       </div>
     </section>
 
-    <!-- Right Column: Geospatial Map, Quantitative Metrics & Arbitrage Table (8 cols) -->
+    <!-- Right Column -->
     <section class="lg:col-span-8 flex flex-col gap-5">
 
       <!-- Top KPI Strip -->
@@ -255,32 +266,29 @@
         </div>
       </div>
 
-      <!-- Interactive OSRM + Open-Meteo Map -->
+      <!-- Map -->
       <div class="glow-purple rounded-2xl p-4 relative">
         <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
           <div>
-            <h2 class="text-sm font-bold uppercase tracking-wider text-white mono">4. Live Geospatial Highway Graph &amp; Climate Risk Overlay</h2>
+            <h2 class="text-sm font-bold uppercase tracking-wider text-white mono">4. Realistic Highway Navigation &amp; Live Weather Telemetry Map</h2>
             <p class="text-xs text-slate-300 mt-0.5">
-              <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 mr-1"></span>Green: CVaR-Optimal Route
-              <span class="inline-block w-2.5 h-2.5 rounded-full bg-purple-400 ml-3 mr-1"></span>Purple: Secondary Safe
-              <span class="inline-block w-2.5 h-2.5 rounded-full bg-orange-500 ml-3 mr-1"></span>Orange Dashed: High-Risk / Flooded
+              <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 mr-1"></span>Green Highway: CVaR-Optimal
+              <span class="inline-block w-2.5 h-2.5 rounded-full bg-purple-400 ml-3 mr-1"></span>Purple: Safe Alternative
+              <span class="inline-block w-2.5 h-2.5 rounded-full bg-orange-500 ml-3 mr-1"></span>Orange Dashed: Flood / Heat Risk
             </p>
           </div>
-          <div class="flex items-center gap-2">
-            <button id="toggleMapThemeBtn" class="text-xs mono px-2.5 py-1 rounded-lg bg-purple-950/80 border border-purple-500/40 text-purple-200 hover:text-white">
-              Switch Base Layer
-            </button>
-            <div class="text-xs mono text-emerald-300 bg-emerald-950/60 border border-emerald-500/30 px-2.5 py-1 rounded-lg">
-              Keyless GIS Engine
-            </div>
+          <div class="flex flex-wrap items-center gap-1.5">
+            <button data-mode="0" class="map-pill-btn active text-xs mono px-2.5 py-1 rounded-lg bg-purple-950/80 border border-purple-500/40 text-purple-200 hover:text-white">🗺️ Road Map</button>
+            <button data-mode="1" class="map-pill-btn text-xs mono px-2.5 py-1 rounded-lg bg-purple-950/80 border border-purple-500/40 text-purple-200 hover:text-white">🛰️ Satellite Hybrid</button>
+            <button data-mode="2" class="map-pill-btn text-xs mono px-2.5 py-1 rounded-lg bg-purple-950/80 border border-purple-500/40 text-purple-200 hover:text-white">⛰️ Terrain Topo</button>
+            <button data-mode="3" class="map-pill-btn text-xs mono px-2.5 py-1 rounded-lg bg-purple-950/80 border border-purple-500/40 text-purple-200 hover:text-white">🌙 Dark Radar</button>
           </div>
         </div>
         <div id="map"></div>
       </div>
 
-      <!-- Bottom Split: Arbitrage Comparison Table & Monte Carlo Distribution -->
+      <!-- Bottom Split -->
       <div class="grid grid-cols-1 xl:grid-cols-12 gap-5">
-        <!-- Candidate Mandi Comparison Table -->
         <div class="xl:col-span-7 glow-orange rounded-2xl p-4 overflow-x-auto">
           <h3 class="text-sm font-bold uppercase tracking-wider text-orange-300 mono mb-3">5. Stochastic Arbitrage Ranking Matrix (10,000 Rollouts)</h3>
           <table class="w-full text-left border-collapse text-xs">
@@ -295,12 +303,10 @@
                 <th class="py-2 pl-2">CVaR<sub>0.95</sub></th>
               </tr>
             </thead>
-            <tbody id="routeTableBody" class="divide-y divide-purple-500/20 mono">
-            </tbody>
+            <tbody id="routeTableBody" class="divide-y divide-purple-500/20 mono"></tbody>
           </table>
         </div>
 
-        <!-- Monte Carlo Profit Distribution Chart -->
         <div class="xl:col-span-5 glow-green rounded-2xl p-4 flex flex-col justify-between">
           <div>
             <h3 class="text-sm font-bold uppercase tracking-wider text-emerald-300 mono mb-1">6. Monte Carlo Profit Density</h3>
@@ -317,7 +323,7 @@
 
   <script>
     // ============================================================================
-    // REAL-WORLD MANDI COORDINATES & BASELINE MARKET SPREADS
+    // MANDI COORDINATES & BASELINE MARKET SPREADS
     // ============================================================================
     const HUBS = {
       nashik: {
@@ -341,68 +347,90 @@
       azadpur: {
         name: "Azadpur Mandi (DL)", lat: 28.7084, lon: 77.1726, originSpot: 1800,
         destinations: [
-          { id: "jaipur", name: "Muhana Mandi, Jaipur", lat: 26.8036, lon: 75.7448, spotMult: 1.49 },
-          { id: "chandigarh", name: "Sector 26 Mandi, Chandigarh", lat: 30.7280, lon: 76.8079, spotMult: 1.52 },
-          { id: "lucknow", name: "Dubagga Mandi, Lucknow", lat: 26.8687, lon: 80.8655, spotMult: 1.76 },
-          { id: "dehradun", name: "Niranjanpur Mandi, Dehradun", lat: 30.2986, lon: 78.0153, spotMult: 1.61 }
+          { id: "kanpur", name: "Anwarganj Mandi, Kanpur", lat: 26.4499, lon: 80.3319, spotMult: 1.45 },
+          { id: "jaipur", name: "Muhana Mandi, Jaipur", lat: 26.8526, lon: 75.7348, spotMult: 1.38 },
+          { id: "chandigarh", name: "Sector 26 Grain Market, Chandigarh", lat: 30.7333, lon: 76.7794, spotMult: 1.60 },
+          { id: "lucknow", name: "Dubagga Mandi, Lucknow", lat: 26.8584, lon: 80.8932, spotMult: 1.52 }
         ]
       },
       palakkad: {
-        name: "Palakkad Hub (KL)", lat: 10.7867, lon: 76.6548, originSpot: 1700,
+        name: "Palakkad Agri Hub (KL)", lat: 10.7867, lon: 76.6548, originSpot: 1700,
         destinations: [
-          { id: "kochi", name: "Maradu Market, Kochi", lat: 9.9390, lon: 76.3213, spotMult: 1.46 },
-          { id: "coimbatore", name: "MGR Market, Coimbatore", lat: 11.0168, lon: 76.9558, spotMult: 1.35 },
-          { id: "madurai", name: "Mattuthavani Market, Madurai", lat: 9.9463, lon: 78.1585, spotMult: 1.60 },
-          { id: "mysuru", name: "Bandipalya APMC, Mysuru", lat: 12.2472, lon: 76.6476, spotMult: 1.68 }
+          { id: "kochi", name: "Maradu Wholesale Market, Kochi", lat: 9.9312, lon: 76.2673, spotMult: 1.48 },
+          { id: "calicut", name: "SM Street Market, Kozhikode", lat: 11.2588, lon: 75.7804, spotMult: 1.56 },
+          { id: "coimbatore_kl", name: "MGR Wholesale Market, Coimbatore", lat: 11.0168, lon: 76.9558, spotMult: 1.35 },
+          { id: "madurai", name: "Mattuthavani Market, Madurai", lat: 9.9252, lon: 78.1198, spotMult: 1.65 }
         ]
       }
     };
 
-    // Initialize Keyless Map (Uses Esri ArcGIS World Dark Gray + OpenStreetMap with zero API key required)
+    const MC_SAMPLES = 10000;
+
     let map = null;
     let mapLayers = null;
     let mcChartInstance = null;
-    let activeTileLayer = null;
+    let activeBaseLayer = null;
+    let activeOverlayLayer = null;
     let tileMode = 0;
+    let swarmRunning = false;
+    let swarmQueued = false;
 
     const TILE_PROVIDERS = [
       {
-        name: "Esri Dark Gray (Keyless)",
-        url: "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
-        options: { attribution: "Tiles &copy; Esri | OSRM | Open-Meteo", maxZoom: 16 }
-      },
-      {
-        name: "OSM Dark Filtered (Keyless)",
-        url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-        options: { attribution: "&copy; OpenStreetMap | OSRM | Open-Meteo", className: "dark-map-tiles", maxZoom: 19 }
-      },
-      {
-        name: "Esri World Street (Keyless)",
+        name: "Road Map",
         url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
-        options: { attribution: "Tiles &copy; Esri | OSRM | Open-Meteo", className: "dark-map-tiles", maxZoom: 18 }
+        options: { attribution: "Map data &copy; Esri, HERE, Garmin, USGS | OSRM | Open-Meteo", className: "gmaps-road-enhancer", maxZoom: 19 }
+      },
+      {
+        name: "Satellite Hybrid",
+        url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        overlayUrl: "https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
+        options: { attribution: "Imagery &copy; Esri, Maxar, Earthstar Geographics | OSRM", maxZoom: 19 }
+      },
+      {
+        name: "Terrain Topo",
+        url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
+        options: { attribution: "Topo &copy; Esri, TomTom, FAO, NOAA | OSRM", maxZoom: 19 }
+      },
+      {
+        name: "Dark Radar",
+        url: "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
+        overlayUrl: "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}",
+        options: { attribution: "Canvas &copy; Esri | OSRM | Open-Meteo", maxZoom: 16 }
       }
     ];
 
     function setBaseTileLayer(index) {
       if (!map) return;
-      if (activeTileLayer) map.removeLayer(activeTileLayer);
+      if (activeBaseLayer) map.removeLayer(activeBaseLayer);
+      if (activeOverlayLayer) {
+        map.removeLayer(activeOverlayLayer);
+        activeOverlayLayer = null;
+      }
+
       const provider = TILE_PROVIDERS[index % TILE_PROVIDERS.length];
-      activeTileLayer = L.tileLayer(provider.url, provider.options);
+      activeBaseLayer = L.tileLayer(provider.url, provider.options);
+      activeBaseLayer.addTo(map);
 
-      // Automatic failover to next keyless provider if any network block occurs
-      activeTileLayer.on('tileerror', function () {
-        if (tileMode < TILE_PROVIDERS.length - 1) {
-          tileMode++;
-          setBaseTileLayer(tileMode);
-        }
+      if (provider.overlayUrl) {
+        // Dedicated pane keeps place labels below route lines and markers
+        activeOverlayLayer = L.tileLayer(provider.overlayUrl, { maxZoom: provider.options.maxZoom, pane: 'labelsPane' });
+        activeOverlayLayer.addTo(map);
+      }
+
+      document.querySelectorAll(".map-pill-btn").forEach((btn) => {
+        btn.classList.toggle("active", parseInt(btn.dataset.mode, 10) === index);
       });
-
-      activeTileLayer.addTo(map);
     }
 
     function initMap() {
       if (map) return;
       map = L.map('map', { zoomControl: true }).setView([20.0059, 73.7897], 6);
+      map.createPane('labelsPane');
+      map.getPane('labelsPane').style.zIndex = 350;
+      map.getPane('labelsPane').style.pointerEvents = 'none';
+
+      L.control.scale({ metric: true, imperial: false, position: 'bottomleft' }).addTo(map);
       setBaseTileLayer(tileMode);
       mapLayers = L.layerGroup().addTo(map);
 
@@ -451,7 +479,8 @@
         distanceKm: roadDistKm,
         durationHrs: durationHrs,
         coords: coords,
-        midPoint: { lat: coords[12][0], lon: coords[12][1] }
+        midPoint: { lat: coords[12][0], lon: coords[12][1] },
+        fallback: true
       };
     }
 
@@ -475,6 +504,7 @@
           midPoint: { lat: coords[midIdx][0], lon: coords[midIdx][1] }
         };
       } catch (e) {
+        document.getElementById("osrm-status").textContent = "FALLBACK";
         return computeGeodesicFallback(origin, dest);
       }
     }
@@ -492,12 +522,13 @@
           windKmh: data.current?.wind_speed_10m ?? 11.0
         };
       } catch (e) {
+        document.getElementById("meteo-status").textContent = "FALLBACK";
         return { tempC: 31.4, precipMm: 3.5, windKmh: 12.0 };
       }
     }
 
     function runMonteCarloCVaR({ loadQ, spotPrice, distanceKm, durationHrs, tempC, precipMm, baseDecayRate }) {
-      const N = 2500;
+      const N = MC_SAMPLES;
       const freightPerKmPerQ = 0.24;
       const baseFreightCost = distanceKm * freightPerKmPerQ * loadQ;
       const profits = new Float64Array(N);
@@ -525,8 +556,8 @@
         sumSpoilage += spoilagePct;
       }
 
-      profits.sort();
-      const alphaCut = Math.floor(0.05 * N);
+      profits.sort(); // typed-array sort is numeric
+      const alphaCut = Math.max(1, Math.floor(0.05 * N));
       let tailSum = 0;
       for (let i = 0; i < alphaCut; i++) tailSum += profits[i];
       const cvar95 = tailSum / alphaCut;
@@ -542,9 +573,12 @@
     }
 
     function updateMCChart(optimalResult, naiveResult) {
+      if (typeof Chart === "undefined") return;
       const ctx = document.getElementById('mcChart').getContext('2d');
-      const minVal = Math.min(optimalResult.samples[20], naiveResult.samples[20]);
-      const maxVal = Math.max(optimalResult.samples[2480], naiveResult.samples[2480]);
+      const lo = Math.floor(0.008 * MC_SAMPLES);
+      const hi = Math.floor(0.992 * MC_SAMPLES);
+      const minVal = Math.min(optimalResult.samples[lo], naiveResult.samples[lo]);
+      const maxVal = Math.max(optimalResult.samples[hi], naiveResult.samples[hi]);
       const bins = 18;
       const step = (maxVal - minVal) / bins || 1000;
 
@@ -556,7 +590,6 @@
         const center = minVal + (b + 0.5) * step;
         labels.push("₹" + Math.round(center / 1000) + "k");
       }
-
       for (let v of optimalResult.samples) {
         const idx = Math.min(bins - 1, Math.max(0, Math.floor((v - minVal) / step)));
         optCounts[idx]++;
@@ -591,9 +624,7 @@
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: {
-            legend: { labels: { color: '#f1f5f9', font: { size: 10 } } }
-          },
+          plugins: { legend: { labels: { color: '#f1f5f9', font: { size: 10 } } } },
           scales: {
             x: { ticks: { color: '#cbd5e1', font: { size: 9 } }, grid: { display: false } },
             y: { ticks: { color: '#cbd5e1', font: { size: 9 } }, grid: { color: 'rgba(168, 85, 247, 0.15)' } }
@@ -603,6 +634,21 @@
     }
 
     async function executeSwarm() {
+      // Prevent overlapping runs (rapid dropdown changes); re-run once after the current one finishes
+      if (swarmRunning) { swarmQueued = true; return; }
+      swarmRunning = true;
+      try {
+        await runSwarmInternal();
+      } catch (err) {
+        console.error(err);
+        appendLog("ERROR", String(err && err.message ? err.message : err), "text-rose-400");
+      } finally {
+        swarmRunning = false;
+        if (swarmQueued) { swarmQueued = false; executeSwarm(); }
+      }
+    }
+
+    async function runSwarmInternal() {
       initMap();
       map.invalidateSize();
 
@@ -626,12 +672,9 @@
         radius: 10, color: '#ffffff', fillColor: '#a855f7', fillOpacity: 1, weight: 3
       }).bindPopup(`<b>Origin Hub:</b> ${hub.name}`).addTo(mapLayers);
 
-      const evaluatedRoutes = [];
-
-      for (let idx = 0; idx < hub.destinations.length; idx++) {
-        const dest = hub.destinations[idx];
+      // Fetch all destinations in parallel (faster than sequential awaits)
+      const evaluatedRoutes = await Promise.all(hub.destinations.map(async (dest, idx) => {
         const spotPrice = Math.round(basePrice * dest.spotMult);
-
         const osrm = await fetchOSRMRoute(hub, dest);
         const meteo = await fetchOpenMeteo(osrm.midPoint.lat, osrm.midPoint.lon);
 
@@ -640,8 +683,7 @@
         const effectivePrecip = meteo.precipMm + floodShock * corridorExposure;
 
         const mc = runMonteCarloCVaR({
-          loadQ,
-          spotPrice,
+          loadQ, spotPrice,
           distanceKm: osrm.distanceKm,
           durationHrs: osrm.durationHrs,
           tempC: effectiveTemp,
@@ -649,21 +691,16 @@
           baseDecayRate: baseDecay
         });
 
-        evaluatedRoutes.push({
-          ...dest,
-          spotPrice,
-          osrm,
-          effectiveTemp,
-          effectivePrecip,
-          ...mc
-        });
+        return { ...dest, spotPrice, osrm, effectiveTemp, effectivePrecip, ...mc };
+      }));
 
+      evaluatedRoutes.forEach((r) => {
         appendLog(
           "CLIMATE_AGENT",
-          `${dest.name}: ${osrm.distanceKm.toFixed(0)}km | Midpoint ${effectiveTemp.toFixed(1)}°C, ${effectivePrecip.toFixed(1)}mm | Spoilage: ${mc.avgSpoilagePct.toFixed(1)}%`,
+          `${r.name}: ${r.osrm.distanceKm.toFixed(0)}km | Midpoint ${r.effectiveTemp.toFixed(1)}°C, ${r.effectivePrecip.toFixed(1)}mm | Spoilage: ${r.avgSpoilagePct.toFixed(1)}%`,
           "text-orange-300"
         );
-      }
+      });
 
       evaluatedRoutes.sort((a, b) => b.riskAdjustedScore - a.riskAdjustedScore);
       const best = evaluatedRoutes[0];
@@ -674,7 +711,7 @@
 
       appendLog(
         "CPP_SOLVER",
-        `10,000 rollouts complete. Optimal CVaR₀.₉₅ target: ${best.name} (E[Π]=₹${Math.round(best.expectedProfit).toLocaleString('en-IN')}).`,
+        `${MC_SAMPLES.toLocaleString('en-IN')} rollouts per route complete. Optimal CVaR₀.₉₅ target: ${best.name} (E[Π]=₹${Math.round(best.expectedProfit).toLocaleString('en-IN')}).`,
         "text-emerald-300"
       );
 
@@ -687,39 +724,51 @@
       }
 
       const bounds = [[hub.lat, hub.lon]];
-      evaluatedRoutes.forEach((r, rank) => {
+      // Draw worst routes first so the optimal route ends up on top
+      [...evaluatedRoutes].reverse().forEach((r) => {
+        const rank = evaluatedRoutes.indexOf(r);
         bounds.push([r.lat, r.lon]);
         const isBest = rank === 0;
         const isHighRisk = r.avgSpoilagePct > 16 || r.effectivePrecip > 25;
 
-        const color = isBest ? '#10b981' : (isHighRisk ? '#f97316' : '#c084fc');
-        const weight = isBest ? 6 : 3.5;
-        const dashArray = isHighRisk && !isBest ? '7, 8' : null;
+        const color = isBest ? '#059669' : (isHighRisk ? '#ea580c' : '#7e22ce');
+        const innerColor = isBest ? '#10b981' : (isHighRisk ? '#fb923c' : '#a855f7');
+        const weight = isBest ? 6 : 4;
+        const dashArray = isHighRisk && !isBest ? '8, 8' : null;
 
-        L.polyline(r.osrm.coords, { color, weight, opacity: isBest ? 0.95 : 0.75, dashArray })
-          .bindPopup(`<b>${r.name}</b><br/>Expected Margin: ₹${Math.round(r.expectedProfit).toLocaleString('en-IN')}<br/>CVaR (95%): ₹${Math.round(r.cvar95).toLocaleString('en-IN')}`)
+        L.polyline(r.osrm.coords, {
+          color: '#0f172a', weight: weight + 4, opacity: isBest ? 0.85 : 0.55,
+          lineCap: 'round', lineJoin: 'round'
+        }).addTo(mapLayers);
+
+        L.polyline(r.osrm.coords, {
+          color: innerColor, weight: weight, opacity: 0.98, dashArray,
+          lineCap: 'round', lineJoin: 'round'
+        })
+          .bindPopup(`
+            <div class="text-xs space-y-1">
+              <div class="font-bold text-sm text-emerald-300">${r.name}</div>
+              <div><b>OSRM Highway:</b> ${r.osrm.distanceKm.toFixed(1)} km (${r.osrm.durationHrs.toFixed(1)} hrs)</div>
+              <div><b>Expected Net Profit:</b> ₹${Math.round(r.expectedProfit).toLocaleString('en-IN')}</div>
+              <div><b>95% Tail-Risk (CVaR):</b> ₹${Math.round(r.cvar95).toLocaleString('en-IN')}</div>
+              <div><b>Spoilage Loss:</b> ${r.avgSpoilagePct.toFixed(1)}%</div>
+            </div>
+          `)
           .addTo(mapLayers);
 
         L.circleMarker([r.lat, r.lon], {
-          radius: isBest ? 9 : 6,
-          color: '#ffffff',
-          fillColor: color,
-          fillOpacity: 0.95,
-          weight: 2
-        }).bindPopup(`<b>${r.name}</b><br/>Spot: ₹${r.spotPrice}/q`).addTo(mapLayers);
+          radius: isBest ? 10 : 7, color: '#0f172a', fillColor: color, fillOpacity: 1, weight: 2.5
+        }).bindPopup(`<b>Destination Mandi: ${r.name}</b><br/>Modal Spot: ₹${r.spotPrice}/q`).addTo(mapLayers);
 
         L.circleMarker([r.osrm.midPoint.lat, r.osrm.midPoint.lon], {
-          radius: 5,
-          color: '#f97316',
-          fillColor: '#fb923c',
-          fillOpacity: 0.95
-        }).bindPopup(`<b>Highway Midpoint Telemetry</b><br/>Temp: ${r.effectiveTemp.toFixed(1)}°C<br/>Rain/Flood: ${r.effectivePrecip.toFixed(1)} mm`).addTo(mapLayers);
+          radius: 6, color: '#0f172a', fillColor: '#f97316', fillOpacity: 1, weight: 2
+        }).bindPopup(`<b>Highway Midpoint Weather Sensor</b><br/>Ambient Temp: ${r.effectiveTemp.toFixed(1)}°C<br/>Precipitation: ${r.effectivePrecip.toFixed(1)} mm`).addTo(mapLayers);
       });
 
-      map.fitBounds(bounds, { padding: [40, 40] });
+      map.fitBounds(bounds, { padding: [45, 45] });
 
       document.getElementById("kpiTarget").textContent = best.name;
-      document.getElementById("kpiDist").textContent = `${best.osrm.distanceKm.toFixed(1)} km | ${(best.osrm.durationHrs).toFixed(1)} hrs via OSRM`;
+      document.getElementById("kpiDist").textContent = `${best.osrm.distanceKm.toFixed(1)} km | ${best.osrm.durationHrs.toFixed(1)} hrs via OSRM`;
       document.getElementById("kpiExpected").textContent = `₹${Math.round(best.expectedProfit).toLocaleString('en-IN')}`;
       document.getElementById("kpiSpread").textContent = `Spot: ₹${best.spotPrice}/q (Load: ${loadQ}q)`;
       document.getElementById("kpiCvar").textContent = `₹${Math.round(best.cvar95).toLocaleString('en-IN')}`;
@@ -750,9 +799,11 @@
     }
 
     // Event Listeners
-    document.getElementById("toggleMapThemeBtn").addEventListener("click", () => {
-      tileMode = (tileMode + 1) % TILE_PROVIDERS.length;
-      setBaseTileLayer(tileMode);
+    document.querySelectorAll(".map-pill-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        tileMode = parseInt(btn.dataset.mode, 10);
+        setBaseTileLayer(tileMode);
+      });
     });
     document.getElementById("floodSlider").addEventListener("input", (e) => {
       document.getElementById("floodVal").textContent = `+${e.target.value} mm/hr`;
