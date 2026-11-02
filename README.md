@@ -134,7 +134,7 @@ $$
 $$
 
 $$
-P^* = \arg\max_{P \in \mathcal{P}} \left\{ \mathbb{E}[\Pi(P)] - \gamma \cdot \left( \mathbb{E}[\Pi(P)] - \text{CVaR}_{0.95}(\Pi(P)) \right) \right\}
+P^* = \arg\max_{P \in \mathcal{P}} \left\lbrace \mathbb{E}[\Pi(P)] - \gamma \cdot \left( \mathbb{E}[\Pi(P)] - \text{CVaR}_{0.95}(\Pi(P)) \right) \right\rbrace
 $$
 
 where $\Pi_{(1)} \le \Pi_{(2)} \le \dots \le \Pi_{(N)}$ are the ordered rollout profits and $\gamma = 0.45$ is the FPO tail-risk aversion parameter.
