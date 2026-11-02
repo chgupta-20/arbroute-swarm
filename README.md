@@ -178,8 +178,6 @@ arbroute-swarm/
 ├── src/
 │   ├── solver.cpp               # C++17 Monte Carlo & O(N) CVaR Graph Kernel (pybind11 bindings)
 │   └── agent_graph.py           # LangGraph Stateful Multi-Agent Orchestrator (Python)
-├── arbroute_swarm_pitch.html    # 7-Slide Technical Pitch Deck (Interactive HTML/MathML Presentation)
-├── pitch_and_demo.md            # Slide-by-Slide Content & Timed 5-Minute Demo Video Script
 └── README.md                    # Complete Engineering, Quantitative & Setup Documentation
 ```
 
